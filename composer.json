@@ -1,0 +1,31 @@
+{
+    "name": "bernik/mqb",
+    "description": "mysql query builder",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Bernik",
+            "email": "i.am.bernik@gmail.com"
+        }
+    ],
+    "autoload": {
+        "files": [ 
+            "src/utils.php",
+            "src/predicates.php",
+            "src/types.php",
+            "src/mqb.php"
+        ]
+    },
+    "autoload-dev": {
+        "files": [ 
+            "src/utils.php",
+            "src/predicates.php",
+            "src/types.php",
+            "src/mqb.php"
+        ],
+        "classmap": [ "spec/" ]
+    },
+    "require-dev": {
+        "kahlan/kahlan": "^4.3"
+    }
+}

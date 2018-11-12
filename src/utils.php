@@ -1,10 +1,10 @@
-<?php namespace mqb\utils; 
+<?php namespace sqb\utils; 
 
 
 function to_sql($x) {
     switch (true) {
         case \is_object($x): return $x->toSql();
-        case \is_array($x): return array_map('\mqb\utils\to_sql', $x);
+        case \is_array($x): return array_map('\sqb\utils\to_sql', $x);
         default: return $x;
     }
 }

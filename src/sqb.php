@@ -1,8 +1,8 @@
-<?php namespace mqb;
+<?php namespace sqb;
 
-use \mqb\types as t;
-use \mqb\predicates as pred;
-use \mqb\utils as utils; 
+use \sqb\types as t;
+use \sqb\predicates as pred;
+use \sqb\utils as utils; 
 
 // types
 function query (...$forms) { return new t\Query(...$forms); } 
@@ -36,7 +36,7 @@ function raw (...$forms) { return new t\Raw(...$forms); }
 
 
 // predicates 
-function not ($form) {}
+function not (...$forms) {}
 function eq ($field, $val, $nullsafe = false) {}
 function lt ($field, $val) {}
 function lte ($field, $val) {}

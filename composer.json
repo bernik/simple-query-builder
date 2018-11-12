@@ -1,6 +1,6 @@
 {
-    "name": "bernik/mqb",
-    "description": "mysql query builder",
+    "name": "bernik/sqb",
+    "description": "simple sql query builder",
     "type": "library",
     "authors": [
         {
@@ -13,7 +13,7 @@
             "src/utils.php",
             "src/predicates.php",
             "src/types.php",
-            "src/mqb.php"
+            "src/sqb.php"
         ]
     },
     "autoload-dev": {
@@ -21,9 +21,12 @@
             "src/utils.php",
             "src/predicates.php",
             "src/types.php",
-            "src/mqb.php"
+            "src/sqb.php"
         ],
         "classmap": [ "spec/" ]
+    },
+    "require": {
+        "php": ">= 7.0"
     },
     "require-dev": {
         "kahlan/kahlan": "^4.3"

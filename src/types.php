@@ -1,6 +1,6 @@
-<?php namespace mqb\types; 
+<?php namespace sqb\types; 
 
-use function \mqb\utils\{to_sql, format_predicates, paren_wrap};
+use function \sqb\utils\{to_sql, format_predicates, paren_wrap};
 
 class QueryModifiers {
     function __construct ($modifiers) {
@@ -16,31 +16,31 @@ class Query {
 
     function toSql () {
         $priorities = array_flip([
-            'mqb\types\With',           
-            'mqb\types\WithRecursive',           
-            'mqb\types\Intersect',           
-            'mqb\types\Union',           
-            'mqb\types\UnionAll',           
-            'mqb\types\Insert',           
-            'mqb\types\Select',           
-            'mqb\types\Update',           
-            'mqb\types\Delete',           
-            'mqb\types\DeleteFrom',           
-            'mqb\types\Columns',           
-            'mqb\types\From',           
-            'mqb\types\Join',           
-            'mqb\types\LeftJoin',           
-            'mqb\types\RightJoin',           
-            'mqb\types\FullJoin',           
-            'mqb\types\Set',           
-            'mqb\types\Where',           
-            'mqb\types\GroupBy',           
-            'mqb\types\Having',           
-            'mqb\types\OrderBy',           
-            'mqb\types\Limit',           
-            'mqb\types\Offset',           
-            'mqb\types\Lock',           
-            'mqb\types\Values',           
+            'sqb\types\With',           
+            'sqb\types\WithRecursive',           
+            'sqb\types\Intersect',           
+            'sqb\types\Union',           
+            'sqb\types\UnionAll',           
+            'sqb\types\Insert',           
+            'sqb\types\Select',           
+            'sqb\types\Update',           
+            'sqb\types\Delete',           
+            'sqb\types\DeleteFrom',           
+            'sqb\types\Columns',           
+            'sqb\types\From',           
+            'sqb\types\Join',           
+            'sqb\types\LeftJoin',           
+            'sqb\types\RightJoin',           
+            'sqb\types\FullJoin',           
+            'sqb\types\Set',           
+            'sqb\types\Where',           
+            'sqb\types\GroupBy',           
+            'sqb\types\Having',           
+            'sqb\types\OrderBy',           
+            'sqb\types\Limit',           
+            'sqb\types\Offset',           
+            'sqb\types\Lock',           
+            'sqb\types\Values',           
         ]);
         usort($this->statements, function ($a, $b) use ($priorities) {
             return $priorities[\get_class($a)] <=> $priorities[\get_class($b)];
@@ -148,7 +148,7 @@ class Join {
         } else {
             $_table = $this->table; 
         }
-        $_preds = $this->preds[0] instanceof \mqb\predicates\Using?
+        $_preds = $this->preds[0] instanceof \sqb\predicates\Using?
             " USING ".to_sql($preds[0]):
             " ON ".join(" AND ", to_sql($this->preds));
         return "INNER JOIN ".$_table.$_preds;
@@ -164,7 +164,7 @@ class LeftJoin {
         } else {
             $_table = $this->table; 
         }
-        $_preds = $this->preds[0] instanceof \mqb\predicates\Using?
+        $_preds = $this->preds[0] instanceof \sqb\predicates\Using?
             " USING ".to_sql($preds[0]):
             " ON ".join(" AND ", to_sql($this->preds));
         return "LEFT JOIN ".$_table.$_preds;
@@ -180,7 +180,7 @@ class RightJoin {
         } else {
             $_table = $this->table; 
         }
-        $_preds = $this->preds[0] instanceof \mqb\predicates\Using?
+        $_preds = $this->preds[0] instanceof \sqb\predicates\Using?
             " USING ".to_sql($preds[0]):
             " ON ".join(" AND ", to_sql($this->preds));
         return "RIGHT JOIN ".$_table.$_preds;

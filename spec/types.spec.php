@@ -1,8 +1,6 @@
-<?php namespace mqb_tests\types; 
+<?php namespace sqb_tests\types; 
 
-require __DIR__."/../vendor/autoload.php"; 
-
-use function \mqb\{q, select, from};
+use function \sqb\{q, select, from};
 
 describe("Example", function () {
     it("foo", function () {

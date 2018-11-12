@@ -1,13 +1,14 @@
-<?php namespace mqb\predicates; 
+<?php namespace sqb\predicates; 
 
-use function \mqb\utils\{to_sql, format_predicates, paren_wrap};
+use function \sqb\utils\{to_sql, format_predicates, paren_wrap};
 
 class Not {
-    function __construct ($form) { $this->form = $form; }
+    function __construct (...$forms) { $this->forms = $forms; }
     function toSql () {
-        return $form instanceof Eq?
-            $form->complement()->toSql():
-            "NOT (".to_sql($form).")";
+        // @todo: multiple forms
+        return $this->forms instanceof Eq?
+            $this->forms->complement()->toSql():
+            "NOT (".to_sql($this->forms).")";
     }
 }
 

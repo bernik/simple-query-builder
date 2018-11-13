@@ -2,13 +2,14 @@
 
 use function \sqb\utils\{to_sql, format_predicates, paren_wrap};
 
-class QueryModifiers {
+class QueryModifiers implements \sqb\protocols\Sqlable {
     function __construct ($modifiers) {
         
     }
+    function toSql () {} 
 }
 
-class Query {
+class Query implements \sqb\protocols\Sqlable {
 
     function __construct (...$statements) {
         $this->statements = $statements;
@@ -51,7 +52,7 @@ class Query {
 
 }
 
-class With { 
+class With implements \sqb\protocols\Sqlable { 
     function __construct (...$bindings) { $this->bindings = $bindings; }
     function toSql () {
         return 'WITH '
@@ -67,7 +68,7 @@ class With {
     }
 }
 
-class WithRecursive { 
+class WithRecursive implements \sqb\protocols\Sqlable { 
     function __construct (...$bindings) { $this->bindings = $bindings; }
     function toSql () {
         return 'WITH RECURSIVE '
@@ -83,63 +84,63 @@ class WithRecursive {
     }
 }
 // @todo
-class Intersect { 
+class Intersect implements \sqb\protocols\Sqlable { 
     function __construct () {}
     function toSql () {}
 }
 
-class Union { 
+class Union implements \sqb\protocols\Sqlable { 
     function __construct (...$queries) { $this->queries = $queries; }
     function toSql () { return join("\nUNION\n", paren_wrap($this->queries)); }
 }
 
-class UnionAll { 
+class UnionAll implements \sqb\protocols\Sqlable { 
     function __construct (...$queries) { $this->queries = $queries; }
     function toSql () { return join("\nUNION ALL\n", paren_wrap($this->queries)); }
 }
 
-class Insert { 
+class Insert implements \sqb\protocols\Sqlable { 
     function __construct ($table, $alias = '') { $this->table = $table; $this->alias = $alias; }
     function toSql () { return "INSERT INTO ".$this->table.($this->alias? ' AS '.$this->alias:""); }
 }
 
-class Select { 
+class Select implements \sqb\protocols\Sqlable { 
     function __construct (...$fields) { $this->fields = $fields; }
     function toSql () {
         return "SELECT ".join(", ", to_sql($this->fields));
     }
 }
 
-class Update { 
+class Update implements \sqb\protocols\Sqlable { 
     function __construct ($table, $alias = '') { $this->table = $table; $this->alias = $alias;}
     function toSql () { 
         return "UPDATE ".$this->table.($this->alias? " AS ".$this->alias:"");
     }
 }
 
-class Delete { 
+class Delete implements \sqb\protocols\Sqlable { 
     function __construct (...$tables) { $this->tables = $tables; }
     function toSql () {
         return "DELETE ".join(", ", $this->tables );
     }
 }
 
-class DeleteFrom { 
+class DeleteFrom implements \sqb\protocols\Sqlable { 
     function __construct ($table) { $this->table = $table; }
     function toSql () { return "DELETE FROM ".$this->table; }
 }
 
-class Columns { 
+class Columns implements \sqb\protocols\Sqlable { 
     function __construct (...$columns) { $this->columns = $columns; }
     function toSql () { return "(".join(", ", $this->columns).")"; }
 }
 
-class From { 
+class From implements \sqb\protocols\Sqlable { 
     function __construct ($table, $alias = '') { $this->table = $table; $this->alias = $alias; }
     function toSql () { return "FROM ".$this->table.($this->alias? " AS ".$this->alias: "");}
 }
 
-class Join { 
+class Join implements \sqb\protocols\Sqlable { 
     function __construct ($table, ...$preds) { $this->table = $table; $this->preds = $preds; }
     function toSql () {
         if (\is_array($this->table)) {
@@ -149,13 +150,13 @@ class Join {
             $_table = $this->table; 
         }
         $_preds = $this->preds[0] instanceof \sqb\predicates\Using?
-            " USING ".to_sql($preds[0]):
+            " ".to_sql($this->preds[0]):
             " ON ".join(" AND ", to_sql($this->preds));
         return "INNER JOIN ".$_table.$_preds;
     }
 }
 
-class LeftJoin { 
+class LeftJoin implements \sqb\protocols\Sqlable { 
     function __construct ($table, ...$preds) { $this->table = $table; $this->preds = $preds; }
     function toSql () {
         if (\is_array($this->table)) {
@@ -171,7 +172,7 @@ class LeftJoin {
     }
 }
 
-class RightJoin { 
+class RightJoin implements \sqb\protocols\Sqlable { 
     function __construct ($table, ...$preds) { $this->table = $table; $this->preds = $preds; }
     function toSql () {
         if (\is_array($this->table)) {
@@ -187,12 +188,12 @@ class RightJoin {
     }
 }
 
-class FullJoin { 
+class FullJoin implements \sqb\protocols\Sqlable { 
     function __construct () {}
     function toSql () {}
 }
 
-class Set { 
+class Set implements \sqb\protocols\Sqlable { 
     function __construct (...$kvs) { $this->kvs = $kvs; }
     function toSql () {
         $pairs = [];
@@ -209,24 +210,24 @@ class Set {
     }
 }
 
-class Where { 
+class Where implements \sqb\protocols\Sqlable { 
     function __construct (...$preds) { $this->preds = $preds; }
     function toSql () { return "WHERE ".format_predicates($this->preds); }
 }
 
-class GroupBy { 
+class GroupBy implements \sqb\protocols\Sqlable { 
     function __construct (...$fields) { $this->fields = $fields; }
     function toSql () {
         return "GROUP BY ".join(", ", to_sql($this->fields));
     }
 }
 
-class Having { 
+class Having implements \sqb\protocols\Sqlable { 
     function __construct (...$preds) { $this->preds = $preds; }
     function toSql () { return "HAVING ".format_predicates($this->preds); }
 }
 
-class OrderBy { 
+class OrderBy implements \sqb\protocols\Sqlable { 
     function __construct (...$orders) { $this->orders = $orders; }
     function toSql () {
         return join(", ", 
@@ -246,22 +247,22 @@ class OrderBy {
     }
 }
 
-class Limit { 
+class Limit implements \sqb\protocols\Sqlable { 
     function __construct ($limit) { $this->limit = $limit; }
     function toSql () { return "LIMIT ".$this->limit; }
 }
 
-class Offset { 
+class Offset implements \sqb\protocols\Sqlable { 
     function __construct ($offset) { $this->offset = $offset; }
     function toSql () { return "OFFSET ".$this->offset; }
 }
 
-class Lock { 
+class Lock implements \sqb\protocols\Sqlable { 
     function __construct ($lock) { $this->lock = $lock; }
     function toSql () { return \strtoupper($this->lock); }
 }
 
-class Values { 
+class Values implements \sqb\protocols\Sqlable { 
     function __construct (...$vals) { $this->vals = $vals; }
     function toSql () {
         return paren_wrap(
@@ -273,7 +274,7 @@ class Values {
 }
 
 
-class Raw {
+class Raw implements \sqb\protocols\Sqlable {
     function __construct (string $str) { $this->str = $str; }
     function toSql () { return $this->str; }
 }

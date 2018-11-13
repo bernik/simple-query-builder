@@ -32,20 +32,20 @@ function limit (...$forms) { return new t\Limit(...$forms); }
 function offset (...$forms) { return new t\Offset(...$forms); }           
 function lock (...$forms) { return new t\Lock(...$forms); }           
 function values (...$forms) { return new t\Values(...$forms); }           
-function raw (...$forms) { return new t\Raw(...$forms); }           
+function raw ($str) { return new t\Raw($str); }           
 
 
 // predicates 
-function not (...$forms) {}
-function eq ($field, $val, $nullsafe = false) {}
-function lt ($field, $val) {}
-function lte ($field, $val) {}
-function gt ($field, $val) {}
-function gte ($field, $val) {}
-function using (...$fields) {}
-function between ($field, $from, $to) {}
-function aand (...$preds) {}
-function oor (...$preds) {}
-function coalesce (...$forms) {}
-function greatest (...$forms) {}
-function least (...$forms) {}
+function not (...$forms) { return new pred\Not(...$forms); }
+function eq ($field, $val, $nullsafe = false) { return new pred\Eq($field, $val, $nullsafe); }
+function lt ($field, $val) { return new pred\Lt($field, $val); }
+function lte ($field, $val) { return new pred\Lte($field, $val); }
+function gt ($field, $val) { return new pred\Gt($field, $val); }
+function gte ($field, $val) { return new pred\Gte($field, $val); }
+function using (...$fields) { return new pred\Using(...$fields); }
+function between ($field, $min, $max) { return new pred\Between($field, $min, $max); }
+function aand (...$preds) { return new pred\Aand(...$preds); }
+function oor (...$preds) { return new pred\Oor(...$preds); }
+function coalesce (...$forms) { return new pred\Coalesce(...$forms); }
+function greatest (...$forms) { return new pred\Greatest(...$forms); }
+function least (...$forms) { return new pred\Least(...$forms); }

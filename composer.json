@@ -10,6 +10,7 @@
     ],
     "autoload": {
         "files": [ 
+            "src/protocols.php",
             "src/utils.php",
             "src/predicates.php",
             "src/types.php",
@@ -18,6 +19,7 @@
     },
     "autoload-dev": {
         "files": [ 
+            "src/protocols.php",
             "src/utils.php",
             "src/predicates.php",
             "src/types.php",
